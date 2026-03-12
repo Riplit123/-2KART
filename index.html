@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>НН2KART — Фиджитал-чемпионат по картингу</title>
     <!-- Подключаем шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,6 +80,7 @@
             cursor: pointer;
             font-size: 16px;
             letter-spacing: 0.5px;
+            text-align: center;
         }
         .btn-primary {
             background: linear-gradient(135deg, #b6ff1a, #3a86ff);
@@ -100,6 +101,10 @@
         .btn-outline:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: #b6ff1a;
+        }
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
         }
 
         /* Хедер */
@@ -438,6 +443,7 @@
             background: rgba(0,0,0,0.3);
             border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
         }
         .rating-section h2 {
             font-size: 36px;
@@ -466,7 +472,30 @@
             opacity: 0.7;
         }
 
-        /* Модальные окна */
+        /* Скрытая кнопка для редактирования рейтинга (квадратик) */
+        .rating-admin-btn {
+            width: 40px;
+            height: 40px;
+            background: #2a2f42;
+            border: 1px solid #3a86ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 0;
+            cursor: pointer;
+            opacity: 0.2;
+            transition: opacity 0.3s, background 0.3s;
+            color: #b6ff1a;
+            font-size: 20px;
+        }
+        .rating-admin-btn:hover {
+            opacity: 1;
+            background: #3a86ff;
+            color: #121827;
+        }
+
+        /* Модальное окно для администрирования рейтинга */
         .modal {
             display: none;
             position: fixed;
@@ -487,7 +516,7 @@
             background: #1e2538;
             padding: 40px;
             border-radius: 30px;
-            max-width: 600px;
+            max-width: 500px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
@@ -500,7 +529,7 @@
             to { opacity: 1; transform: scale(1); }
         }
         .modal-content h3 {
-            font-size: 32px;
+            font-size: 28px;
             margin-bottom: 20px;
             color: #b6ff1a;
         }
@@ -513,8 +542,6 @@
         .modal-content .close:hover {
             color: #b6ff1a;
         }
-
-        /* Форма регистрации */
         .form-group {
             margin-bottom: 20px;
         }
@@ -524,7 +551,7 @@
             font-weight: 600;
             color: #b6ff1a;
         }
-        .form-group input, .form-group textarea, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px;
             border-radius: 10px;
@@ -532,18 +559,23 @@
             background: rgba(255,255,255,0.1);
             color: #fff;
         }
-        .form-group input[type="file"] {
+        .rating-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .rating-item {
+            display: flex;
+            justify-content: space-between;
             padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .participant-row {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        .participant-row h5 {
-            margin-bottom: 10px;
-            color: #3a86ff;
+        .rating-item button {
+            background: none;
+            border: none;
+            color: #ff5e5e;
+            cursor: pointer;
+            font-size: 18px;
         }
 
         /* Футер */
@@ -585,12 +617,46 @@
             .track::before {
                 display: none;
             }
+            .hero-buttons .btn {
+                display: inline-block;
+                margin: 10px 5px;
+            }
         }
+
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
             header { flex-direction: column; gap: 20px; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
             .hero-title { font-size: 48px; }
+            .split-left, .split-right { padding: 40px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 36px; }
+            .hero-title .line3 { font-size: 18px; }
+            .hero-buttons .btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+            .hero-buttons .btn-outline {
+                margin-left: 0;
+            }
+            .track-point {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+            .track-point span {
+                font-size: 14px;
+                top: -35px;
+            }
+            .stage-card {
+                width: 100%;
+                padding: 20px;
+            }
+            .rating-section { padding: 20px; }
+            .rating-section h2 { font-size: 28px; }
         }
     </style>
 </head>
@@ -617,7 +683,8 @@
                     <span class="line3">Нажми газ в цифре — дожми в реале</span>
                 </h1>
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="openModal('registerModal')">Стать участником</button>
+                    <!-- Кнопка "Стать участником" ведёт на Яндекс.Формы -->
+                    <a href="https://forms.yandex.ru/u/69b2a77b49af471ecb411351" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Стать участником</a>
                     <button class="btn btn-outline" onclick="openModal('aboutModal')">О проекте</button>
                 </div>
             </div>
@@ -705,7 +772,7 @@
                 <div class="track-point" data-stage="7"><span>Медиа</span>8</div>
             </div>
 
-            <!-- Карточки с деталями мероприятий (одна карточка на каждый этап) -->
+            <!-- Карточки с деталями мероприятий -->
             <div class="stage-cards" id="stageCards">
                 <div class="stage-card" data-stage="0">
                     <h4>1. Сбор коммерческих предложений</h4>
@@ -757,10 +824,10 @@
             </div>
         </section>
 
-        <!-- Рейтинговая таблица (пустая) -->
+        <!-- Рейтинговая таблица (динамическая) -->
         <section id="rating" class="rating-section fade-in">
             <h2>Рейтинг команд</h2>
-            <table class="rating-table">
+            <table class="rating-table" id="ratingTable">
                 <thead>
                     <tr>
                         <th>Место</th>
@@ -768,12 +835,14 @@
                         <th>Баллы</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="3" class="empty-message">Рейтинг появится после регистрации участников</td>
-                    </tr>
+                <tbody id="ratingBody">
+                    <!-- Данные будут вставлены через JS -->
                 </tbody>
             </table>
+            <!-- Скрытая кнопка для добавления команд (квадратик) -->
+            <div class="rating-admin-btn" onclick="openModal('ratingAdminModal')">
+                <i class="fas fa-cog"></i>
+            </div>
         </section>
 
         <!-- Футер -->
@@ -789,69 +858,7 @@
         </footer>
     </div>
 
-    <!-- Модальное окно регистрации -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('registerModal')">&times;</span>
-            <h3>Регистрация команды</h3>
-            <form id="registerForm" onsubmit="event.preventDefault(); alert('Форма отправлена (демо)'); closeModal('registerModal');">
-                <div class="form-group">
-                    <label>Ф.И.О. наставника команды</label>
-                    <input type="text" required>
-                </div>
-                <div class="form-group">
-                    <label>Должность наставника</label>
-                    <input type="text" required>
-                </div>
-                <div class="form-group">
-                    <label>Название команды</label>
-                    <input type="text" required>
-                </div>
-                <div class="form-group">
-                    <label>Участники (5 человек)</label>
-                    <div id="participants">
-                        <div class="participant-row">
-                            <h5>Участник 1</h5>
-                            <input type="text" placeholder="Ф.И.О." required>
-                            <input type="date" placeholder="Дата рождения" required style="margin-top:10px;">
-                            <input type="text" placeholder="Образовательное учреждение" required style="margin-top:10px;">
-                        </div>
-                        <div class="participant-row">
-                            <h5>Участник 2</h5>
-                            <input type="text" placeholder="Ф.И.О." required>
-                            <input type="date" placeholder="Дата рождения" required style="margin-top:10px;">
-                            <input type="text" placeholder="Образовательное учреждение" required style="margin-top:10px;">
-                        </div>
-                        <div class="participant-row">
-                            <h5>Участник 3</h5>
-                            <input type="text" placeholder="Ф.И.О." required>
-                            <input type="date" placeholder="Дата рождения" required style="margin-top:10px;">
-                            <input type="text" placeholder="Образовательное учреждение" required style="margin-top:10px;">
-                        </div>
-                        <div class="participant-row">
-                            <h5>Участник 4</h5>
-                            <input type="text" placeholder="Ф.И.О." required>
-                            <input type="date" placeholder="Дата рождения" required style="margin-top:10px;">
-                            <input type="text" placeholder="Образовательное учреждение" required style="margin-top:10px;">
-                        </div>
-                        <div class="participant-row">
-                            <h5>Участник 5</h5>
-                            <input type="text" placeholder="Ф.И.О." required>
-                            <input type="date" placeholder="Дата рождения" required style="margin-top:10px;">
-                            <input type="text" placeholder="Образовательное учреждение" required style="margin-top:10px;">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Согласие на обработку персональных данных (PDF)</label>
-                    <input type="file" accept=".pdf" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width:100%;">Отправить заявку</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Модальное окно "О проекте" (обновлено информацией из файла) -->
+    <!-- Модальное окно "О проекте" -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('aboutModal')">&times;</span>
@@ -864,11 +871,36 @@
         </div>
     </div>
 
+    <!-- Модальное окно для администрирования рейтинга (скрытая кнопка) -->
+    <div id="ratingAdminModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('ratingAdminModal')">&times;</span>
+            <h3>Управление рейтингом</h3>
+            <form id="addRatingForm" onsubmit="addRatingEntry(event)">
+                <div class="form-group">
+                    <label>Название команды</label>
+                    <input type="text" id="teamName" required>
+                </div>
+                <div class="form-group">
+                    <label>Баллы</label>
+                    <input type="number" id="teamScore" required min="0" step="1">
+                </div>
+                <button type="submit" class="btn btn-primary btn-small">Добавить команду</button>
+            </form>
+            <div class="rating-list" id="ratingList">
+                <!-- Здесь будут отображаться добавленные команды с возможностью удаления -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // Функции для модальных окон
         function openModal(id) {
             document.getElementById(id).classList.add('active');
             document.body.style.overflow = 'hidden';
+            if (id === 'ratingAdminModal') {
+                renderRatingList(); // обновляем список в админке
+            }
         }
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
@@ -884,7 +916,6 @@
         // Работа с этапами: при наведении на точку показываем карточку
         const trackPoints = document.querySelectorAll('.track-point');
         const stageCards = document.querySelectorAll('.stage-card');
-
         trackPoints.forEach(point => {
             point.addEventListener('mouseenter', function() {
                 const stageIndex = this.getAttribute('data-stage');
@@ -897,9 +928,6 @@
             });
         });
 
-        // По желанию можно показать первую карточку по умолчанию
-        // stageCards[0].classList.add('active');
-
         // Анимация появления при скролле
         const fadeElements = document.querySelectorAll('.fade-in');
         const observer = new IntersectionObserver((entries) => {
@@ -909,10 +937,9 @@
                 }
             });
         }, { threshold: 0.1 });
-
         fadeElements.forEach(el => observer.observe(el));
 
-        // Телеметрия в hero-изображении (доп. анимация)
+        // Телеметрия в hero-изображении
         window.addEventListener('load', function() {
             const heroImage = document.querySelector('.hero-image');
             const telemetry = document.createElement('div');
@@ -935,7 +962,84 @@
                 telemetry.innerHTML = `Скорость: ${speed} km/h | Круг: ${Math.floor(Math.random()*60)+1}:${Math.floor(Math.random()*60)}`;
             }, 1000);
         });
+
+        // --- Рейтинг (динамический, с сохранением в localStorage) ---
+        let ratingData = JSON.parse(localStorage.getItem('ratingData')) || [];
+
+        function saveRating() {
+            localStorage.setItem('ratingData', JSON.stringify(ratingData));
+        }
+
+        // Функция сортировки рейтинга по баллам (убывание) и обновления таблицы
+        function updateRatingTable() {
+            const tbody = document.getElementById('ratingBody');
+            if (!tbody) return;
+            if (ratingData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="empty-message">Рейтинг появится после регистрации участников</td></tr>`;
+                return;
+            }
+            // Сортируем по баллам (по убыванию)
+            const sorted = [...ratingData].sort((a, b) => b.score - a.score);
+            let html = '';
+            sorted.forEach((item, index) => {
+                html += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.team}</td>
+                    <td>${item.score}</td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // Отображение списка команд в админке (с кнопками удаления)
+        function renderRatingList() {
+            const listContainer = document.getElementById('ratingList');
+            if (!listContainer) return;
+            if (ratingData.length === 0) {
+                listContainer.innerHTML = '<p style="opacity:0.7;">Пока нет добавленных команд</p>';
+                return;
+            }
+            let html = '';
+            ratingData.forEach((item, index) => {
+                html += `<div class="rating-item">
+                    <span>${item.team} — ${item.score} баллов</span>
+                    <button onclick="deleteRatingEntry(${index})"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+            listContainer.innerHTML = html;
+        }
+
+        // Добавление новой записи из формы
+        function addRatingEntry(event) {
+            event.preventDefault();
+            const teamName = document.getElementById('teamName').value.trim();
+            const teamScore = parseInt(document.getElementById('teamScore').value, 10);
+            if (teamName && !isNaN(teamScore)) {
+                ratingData.push({ team: teamName, score: teamScore });
+                saveRating();
+                updateRatingTable();
+                renderRatingList();
+                document.getElementById('addRatingForm').reset();
+                // Не закрываем модальное окно, чтобы можно было добавить ещё
+            }
+        }
+
+        // Удаление записи
+        function deleteRatingEntry(index) {
+            ratingData.splice(index, 1);
+            saveRating();
+            updateRatingTable();
+            renderRatingList();
+        }
+
+        // Инициализация таблицы при загрузке
+        updateRatingTable();
+
+        // Делаем функции глобальными для вызова из HTML
+        window.addRatingEntry = addRatingEntry;
+        window.deleteRatingEntry = deleteRatingEntry;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
     </script>
 </body>
-
 </html>
