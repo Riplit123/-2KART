@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>НН2KART — Фиджитал-чемпионат по картингу</title>
-    <!-- Подключаем шрифты -->
+    <title>НН2КАРТ — Инженерно-спортивный картинг</title>
+    <!-- Шрифт Poppins (брендбук) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Иконки (Font Awesome) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Сброс и базовые стили */
+        /* Брендбук цвета */
+        :root {
+            --graphite: #08070D;    /* Абсолютный графит */
+            --ion-light: #DEF9F6;    /* Ионный свет */
+            --cyber-green: #54D830;  /* Кибер-зеленый */
+            --white: #FCFFCF;        /* Белый */
+            --tech-blue: #2C9FE2;    /* Техно-синий */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,15 +27,15 @@
         }
 
         body {
-            background-color: #121827;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--graphite);
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
             line-height: 1.5;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Фоновые сетки и линии (более яркие) */
+        /* Фоновая сетка (ионный свет с низкой непрозрачностью) */
         body::before {
             content: '';
             position: fixed;
@@ -36,8 +44,8 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(58, 134, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(58, 134, 255, 0.1) 1px, transparent 1px);
+                linear-gradient(rgba(84, 216, 48, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(84, 216, 48, 0.08) 1px, transparent 1px);
             background-size: 50px 50px;
             pointer-events: none;
             z-index: 0;
@@ -49,7 +57,6 @@
             100% { transform: translateY(-20px) translateX(-10px); }
         }
 
-        /* Анимация появления при скролле */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -81,26 +88,28 @@
             font-size: 16px;
             letter-spacing: 0.5px;
             text-align: center;
+            font-family: 'Poppins', sans-serif;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #b6ff1a, #3a86ff);
-            color: #0a0f1f;
-            box-shadow: 0 0 20px rgba(182, 255, 26, 0.5);
+            background: linear-gradient(135deg, var(--cyber-green), var(--tech-blue));
+            color: var(--graphite);
+            box-shadow: 0 0 20px rgba(84, 216, 48, 0.5);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         .btn-primary:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(182, 255, 26, 0.8);
+            box-shadow: 0 0 30px rgba(84, 216, 48, 0.8);
         }
         .btn-outline {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(8, 7, 13, 0.5);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
+            border: 1px solid var(--cyber-green);
+            color: var(--white);
             margin-left: 16px;
         }
         .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #b6ff1a;
+            background: rgba(84, 216, 48, 0.2);
+            border-color: var(--cyber-green);
         }
         .btn-small {
             padding: 8px 16px;
@@ -119,15 +128,19 @@
         .logo {
             font-size: 32px;
             font-weight: 800;
-            font-family: 'Manrope', sans-serif;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #b6ff1a, #3a86ff);
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--cyber-green), var(--tech-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             position: relative;
-            transform: skew(-5deg);
+        }
+        .logo sup {
+            font-size: 16px;
+            background: none;
+            -webkit-text-fill-color: var(--cyber-green);
+            color: var(--cyber-green);
         }
 
         .nav-links {
@@ -135,14 +148,14 @@
             gap: 30px;
         }
         .nav-links a {
-            color: #fff;
+            color: var(--white);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             font-size: 16px;
         }
         .nav-links a:hover {
-            color: #b6ff1a;
+            color: var(--cyber-green);
         }
 
         /* Hero */
@@ -152,7 +165,6 @@
             grid-template-columns: 1fr 1fr;
             align-items: center;
             gap: 40px;
-            position: relative;
         }
 
         .hero-title {
@@ -160,24 +172,25 @@
             font-weight: 800;
             line-height: 1.1;
             text-transform: uppercase;
-            font-family: 'Manrope', sans-serif;
         }
         .hero-title .line1 {
             display: block;
-            color: #fff;
+            color: var(--ion-light);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 2px;
         }
         .hero-title .line2 {
             display: block;
-            color: #b6ff1a;
-            text-shadow: none;
+            color: var(--cyber-green);
+            font-size: 72px;
         }
         .hero-title .line3 {
             display: block;
-            font-size: 24px;
-            font-weight: 400;
-            letter-spacing: 2px;
+            font-size: 28px;
+            font-weight: 600;
             margin-top: 20px;
-            color: rgba(255,255,255,0.8);
+            color: var(--white);
         }
 
         .hero-buttons {
@@ -187,8 +200,8 @@
         .hero-image {
             position: relative;
             height: 400px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" opacity="0.8"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23b6ff1a"/><stop offset="100%" stop-color="%233a86ff"/></linearGradient></defs><rect width="800" height="600" fill="black"/><g stroke="url(%23grad)" stroke-width="2" fill="none"><circle cx="400" cy="300" r="150"/><circle cx="400" cy="300" r="100"/><circle cx="400" cy="300" r="50"/><line x1="200" y1="150" x2="600" y2="450" stroke-dasharray="10 10"/><line x1="200" y1="450" x2="600" y2="150" stroke-dasharray="10 10"/></g><text x="400" y="320" font-family="Arial" font-size="48" fill="white" text-anchor="middle" dy=".3em">KART</text></svg>') no-repeat center/contain;
-            filter: drop-shadow(0 0 20px #3a86ff);
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" opacity="0.9"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%2354D830"/><stop offset="100%" stop-color="%232C9FE2"/></linearGradient></defs><rect width="800" height="600" fill="%2308070D"/><g stroke="url(%23grad)" stroke-width="3" fill="none"><circle cx="400" cy="300" r="150"/><circle cx="400" cy="300" r="100"/><circle cx="400" cy="300" r="50"/><line x1="200" y1="150" x2="600" y2="450" stroke-dasharray="10 10"/><line x1="200" y1="450" x2="600" y2="150" stroke-dasharray="10 10"/></g><text x="400" y="320" font-family="Poppins" font-size="52" fill="%23FCFFCF" text-anchor="middle" font-weight="800" dy=".3em">KART</text></svg>') no-repeat center/contain;
+            filter: drop-shadow(0 0 20px var(--cyber-green));
             animation: float 6s ease-in-out infinite;
         }
 
@@ -198,7 +211,7 @@
             100% { transform: translateY(0px); }
         }
 
-        /* Split screen (Концепция) */
+        /* Split screen */
         .split-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -206,7 +219,7 @@
             margin: 100px 0;
             border-radius: 30px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(84, 216, 48, 0.3);
         }
 
         .split-left, .split-right {
@@ -215,34 +228,33 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            position: relative;
             backdrop-filter: blur(5px);
         }
 
         .split-left {
-            background: linear-gradient(135deg, rgba(10,15,31,0.9), rgba(58,134,255,0.2));
-            border-right: 2px solid #3a86ff;
+            background: linear-gradient(135deg, rgba(8,7,13,0.9), rgba(44, 159, 226, 0.15));
+            border-right: 2px solid var(--tech-blue);
         }
         .split-right {
-            background: linear-gradient(135deg, rgba(10,15,31,0.9), rgba(182,255,26,0.1));
+            background: linear-gradient(135deg, rgba(8,7,13,0.9), rgba(84, 216, 48, 0.1));
         }
 
         .split-left h3, .split-right h3 {
             font-size: 42px;
             font-weight: 800;
             margin-bottom: 20px;
-            font-family: 'Manrope', sans-serif;
         }
-        .split-left h3 { color: #3a86ff; }
-        .split-right h3 { color: #b6ff1a; }
+        .split-left h3 { color: var(--tech-blue); }
+        .split-right h3 { color: var(--cyber-green); }
 
         .split-left p, .split-right p {
             font-size: 18px;
             margin-bottom: 30px;
             opacity: 0.9;
+            color: var(--ion-light);
         }
 
-        /* Карточки ценностей */
+        /* Values */
         .values-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -251,44 +263,39 @@
         }
 
         .value-card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(8,7,13,0.7);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(84, 216, 48, 0.3);
             border-radius: 30px;
             padding: 40px 30px;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s;
         }
         .value-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: #b6ff1a;
-            box-shadow: 0 0 40px rgba(182,255,26,0.3);
+            transform: translateY(-15px);
+            border-color: var(--cyber-green);
+            box-shadow: 0 0 40px rgba(84, 216, 48, 0.4);
         }
 
         .value-icon {
             font-size: 60px;
             margin-bottom: 20px;
-            color: #8B1E3F;
-            text-shadow: 0 0 15px #8B1E3F;
-            transition: transform 0.3s;
-        }
-        .value-card:hover .value-icon {
-            transform: rotate(5deg) scale(1.1);
+            color: var(--cyber-green);
+            text-shadow: 0 0 15px var(--cyber-green);
         }
         .value-card h4 {
             font-size: 28px;
             font-weight: 800;
             margin-bottom: 16px;
-            background: linear-gradient(135deg, #b6ff1a, #3a86ff);
+            background: linear-gradient(135deg, var(--cyber-green), var(--tech-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .value-card p {
-            font-size: 16px;
-            opacity: 0.8;
+            color: var(--ion-light);
         }
 
-        /* Команды */
+        /* Teams */
         .teams-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -297,47 +304,50 @@
         }
 
         .team-card {
-            background: rgba(255,255,255,0.03);
+            background: rgba(8,7,13,0.5);
             border-radius: 30px;
             padding: 40px 20px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(44, 159, 226, 0.3);
             transition: 0.3s;
         }
         .team-card:hover {
-            border-color: #3a86ff;
+            border-color: var(--tech-blue);
             transform: scale(1.02);
         }
         .team-card .icon {
             font-size: 50px;
-            color: #3a86ff;
+            color: var(--tech-blue);
             margin-bottom: 20px;
         }
         .team-card h4 {
             font-size: 28px;
             font-weight: 800;
-            margin-bottom: 10px;
+            color: var(--white);
         }
         .team-card .badge {
             display: inline-block;
-            background: #8B1E3F;
+            background: var(--cyber-green);
             padding: 4px 12px;
             border-radius: 40px;
             font-size: 14px;
             font-weight: 600;
-            color: #fff;
+            color: var(--graphite);
+        }
+        .team-card p {
+            color: var(--ion-light);
         }
 
-        /* Дорожная карта (трасса) */
+        /* Roadmap */
         .roadmap {
             margin: 100px 0;
-            position: relative;
         }
         .roadmap h2 {
             font-size: 48px;
             font-weight: 800;
             margin-bottom: 60px;
             text-align: center;
+            color: var(--white);
         }
         .track {
             display: flex;
@@ -355,14 +365,14 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #b6ff1a, #3a86ff);
+            background: linear-gradient(90deg, var(--cyber-green), var(--tech-blue));
             transform: translateY(-50%);
             z-index: 1;
             border-radius: 2px;
         }
         .track-point {
-            background: #121827;
-            border: 3px solid #3a86ff;
+            background: var(--graphite);
+            border: 3px solid var(--cyber-green);
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -371,16 +381,16 @@
             justify-content: center;
             font-weight: 800;
             font-size: 20px;
-            color: #fff;
+            color: var(--white);
             position: relative;
             z-index: 2;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
         .track-point:hover {
-            border-color: #b6ff1a;
+            border-color: var(--tech-blue);
             transform: scale(1.2);
-            box-shadow: 0 0 30px #b6ff1a;
+            box-shadow: 0 0 30px var(--tech-blue);
         }
         .track-point span {
             position: absolute;
@@ -390,10 +400,9 @@
             white-space: nowrap;
             font-size: 16px;
             font-weight: 600;
-            color: #fff;
+            color: var(--ion-light);
         }
 
-        /* Контейнер для квадратов описания этапов */
         .stage-cards {
             display: flex;
             flex-wrap: wrap;
@@ -403,19 +412,18 @@
             min-height: 250px;
         }
         .stage-card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(8,7,13,0.8);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid var(--cyber-green);
             border-radius: 20px;
             padding: 30px;
             width: 320px;
-            transition: all 0.3s;
             display: none;
-            border-top: 4px solid #8B1E3F;
+            border-top: 4px solid var(--cyber-green);
         }
         .stage-card.active {
             display: block;
-            animation: fadeInCard 0.3s ease;
+            animation: fadeInCard 0.3s;
         }
         @keyframes fadeInCard {
             from { opacity: 0; transform: translateY(20px); }
@@ -424,78 +432,68 @@
         .stage-card h4 {
             font-size: 24px;
             margin-bottom: 15px;
-            color: #b6ff1a;
-        }
-        .stage-card p {
-            opacity: 0.9;
-            line-height: 1.6;
-            margin-bottom: 8px;
+            color: var(--cyber-green);
         }
         .stage-card .date {
-            color: #3a86ff;
+            color: var(--tech-blue);
             font-weight: 600;
         }
+        .stage-card p {
+            color: var(--ion-light);
+        }
 
-        /* Рейтинговая таблица */
+        /* Rating */
         .rating-section {
             margin: 80px 0;
             padding: 40px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(8,7,13,0.6);
             border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
+            border: 1px solid var(--tech-blue);
         }
         .rating-section h2 {
             font-size: 36px;
             margin-bottom: 30px;
             text-align: center;
+            color: var(--white);
         }
         .rating-table {
             width: 100%;
             border-collapse: collapse;
-            text-align: left;
         }
         .rating-table th {
             padding: 15px;
-            background: #3a86ff;
-            color: #121827;
+            background: var(--tech-blue);
+            color: var(--graphite);
             font-weight: 800;
         }
         .rating-table td {
             padding: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(222, 249, 246, 0.2);
+            color: var(--ion-light);
         }
-        .rating-table .empty-message {
-            text-align: center;
-            padding: 40px;
-            font-style: italic;
-            opacity: 0.7;
-        }
-
-        /* Скрытая кнопка для редактирования рейтинга (квадратик) */
         .rating-admin-btn {
             width: 40px;
             height: 40px;
-            background: #2a2f42;
-            border: 1px solid #3a86ff;
+            background: #1a1a2a;
+            border: 1px solid var(--cyber-green);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 20px auto 0;
             cursor: pointer;
-            opacity: 0.2;
-            transition: opacity 0.3s, background 0.3s;
-            color: #b6ff1a;
+            opacity: 0.3;
+            transition: 0.3s;
+            color: var(--cyber-green);
             font-size: 20px;
         }
         .rating-admin-btn:hover {
             opacity: 1;
-            background: #3a86ff;
-            color: #121827;
+            background: var(--cyber-green);
+            color: var(--graphite);
         }
 
-        /* Модальное окно для администрирования рейтинга */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -503,7 +501,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(8,7,13,0.9);
             backdrop-filter: blur(5px);
             align-items: center;
             justify-content: center;
@@ -513,35 +511,34 @@
             display: flex;
         }
         .modal-content {
-            background: #1e2538;
+            background: var(--graphite);
             padding: 40px;
             border-radius: 30px;
             max-width: 500px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            border: 1px solid #3a86ff;
-            box-shadow: 0 0 40px rgba(58,134,255,0.3);
-            animation: modalFade 0.3s;
-        }
-        @keyframes modalFade {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            border: 1px solid var(--cyber-green);
+            box-shadow: 0 0 40px rgba(84, 216, 48, 0.3);
         }
         .modal-content h3 {
             font-size: 28px;
             margin-bottom: 20px;
-            color: #b6ff1a;
+            color: var(--cyber-green);
+        }
+        .modal-content p {
+            color: var(--ion-light);
         }
         .modal-content .close {
             float: right;
             font-size: 28px;
             cursor: pointer;
-            color: #fff;
+            color: var(--white);
         }
         .modal-content .close:hover {
-            color: #b6ff1a;
+            color: var(--cyber-green);
         }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -549,40 +546,35 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            color: #b6ff1a;
+            color: var(--cyber-green);
         }
         .form-group input {
             width: 100%;
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-        .rating-list {
-            margin-top: 20px;
-            max-height: 200px;
-            overflow-y: auto;
+            border: 1px solid var(--tech-blue);
+            background: rgba(222, 249, 246, 0.1);
+            color: var(--white);
         }
         .rating-item {
             display: flex;
             justify-content: space-between;
             padding: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--tech-blue);
+            color: var(--ion-light);
         }
         .rating-item button {
             background: none;
             border: none;
-            color: #ff5e5e;
+            color: var(--cyber-green);
             cursor: pointer;
             font-size: 18px;
         }
 
-        /* Футер */
         footer {
             padding: 50px 0;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(84, 216, 48, 0.3);
             margin-top: 80px;
         }
         .footer-links {
@@ -592,79 +584,38 @@
             margin: 20px 0;
         }
         .footer-links a {
-            color: #fff;
+            color: var(--ion-light);
             text-decoration: none;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+            opacity: 0.8;
         }
         .footer-links a:hover {
             opacity: 1;
-            color: #b6ff1a;
+            color: var(--cyber-green);
+        }
+        footer p {
+            color: var(--ion-light);
+            opacity: 0.7;
         }
 
-        /* Адаптивность */
+        /* Адаптив */
         @media (max-width: 1024px) {
-            .hero {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .hero-image {
-                height: 300px;
-            }
-            .split-section, .values-grid, .teams-grid {
-                grid-template-columns: 1fr;
-            }
-            .track::before {
-                display: none;
-            }
-            .hero-buttons .btn {
-                display: inline-block;
-                margin: 10px 5px;
-            }
+            .hero { grid-template-columns: 1fr; text-align: center; }
+            .hero-image { height: 300px; }
+            .split-section, .values-grid, .teams-grid { grid-template-columns: 1fr; }
+            .track::before { display: none; }
         }
-
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
             header { flex-direction: column; gap: 20px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
             .hero-title { font-size: 48px; }
-            .split-left, .split-right { padding: 40px 20px; }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title { font-size: 36px; }
-            .hero-title .line3 { font-size: 18px; }
-            .hero-buttons .btn {
-                display: block;
-                width: 100%;
-                margin: 10px 0;
-            }
-            .hero-buttons .btn-outline {
-                margin-left: 0;
-            }
-            .track-point {
-                width: 50px;
-                height: 50px;
-                font-size: 18px;
-            }
-            .track-point span {
-                font-size: 14px;
-                top: -35px;
-            }
-            .stage-card {
-                width: 100%;
-                padding: 20px;
-            }
-            .rating-section { padding: 20px; }
-            .rating-section h2 { font-size: 28px; }
+            .hero-title .line2 { font-size: 56px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Хедер с навигацией -->
         <header>
-            <div class="logo">НН2KART</div>
+            <div class="logo">НН2КАРТ<sup>®</sup></div>
             <div class="nav-links">
                 <a href="#concept">Концепция</a>
                 <a href="#values">Ценности</a>
@@ -674,93 +625,87 @@
             </div>
         </header>
 
-        <!-- Hero блок -->
         <section class="hero fade-in" id="hero">
             <div>
                 <h1 class="hero-title">
-                    <span class="line1">Первый в России</span>
-                    <span class="line2">Фиджитал-чемпионат</span>
-                    <span class="line3">Нажми газ в цифре — дожми в реале</span>
+                    <span class="line1">ПЕРВЫЙ В РОССИИ ФИДЖИТАЛ-ЧЕМПИОНАТ</span>
+                    <span class="line2">НН2КАРТ</span>
+                    <span class="line3">НАЖМИ ГАЗ В ЦИФРЕ — ДОЖМИ В РЕАЛЕ</span>
                 </h1>
                 <div class="hero-buttons">
-                    <!-- Кнопка "Стать участником" ведёт на Яндекс.Формы -->
-                    <a href="https://forms.yandex.ru/u/69b2a77b49af471ecb411351" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Стать участником</a>
+                    <a href="https://forms.yandex.ru/u/69b2a77b49af471ecb411351" class="btn btn-primary" target="_blank">Стать участником</a>
                     <button class="btn btn-outline" onclick="openModal('aboutModal')">О проекте</button>
                 </div>
             </div>
             <div class="hero-image"></div>
         </section>
 
-        <!-- Блок концепции -->
         <section id="concept" class="fade-in">
-            <h2 style="font-size: 48px; font-weight: 800; margin-bottom: 20px;">Как это работает</h2>
+            <h2 style="font-size: 48px; font-weight: 800; margin-bottom: 20px; color: var(--white);">Как это работает</h2>
             <div class="split-section">
                 <div class="split-left">
                     <h3>DIGITAL STAGE</h3>
-                    <p>Сначала подростки и профи сражаются в симуляторе на цифровом двойнике реальной трассы. Телеметрия, настройки, киберспортивная точность.</p>
-                    <i class="fas fa-gamepad" style="font-size: 40px; color: #3a86ff;"></i>
+                    <p>Команды соревнуются в симуляторе на цифровом двойнике реальной трассы. Каждый участник управляет своей ролью: пилот, механик, стратег, программист.</p>
+                    <i class="fas fa-gamepad" style="font-size: 40px; color: var(--tech-blue);"></i>
                 </div>
                 <div class="split-right">
                     <h3>REAL RACE</h3>
-                    <p>Офлайн-финал на картодроме. Результаты онлайна влияют на стартовые позиции и условия реальной гонки. Асфальт, резина, адреналин.</p>
-                    <i class="fas fa-flag-checkered" style="font-size: 40px; color: #b6ff1a;"></i>
+                    <p>Офлайн-финал на картодроме F‑Drive. Результаты онлайна влияют на стартовые позиции. Адреналин, скорость, командная работа.</p>
+                    <i class="fas fa-flag-checkered" style="font-size: 40px; color: var(--cyber-green);"></i>
                 </div>
             </div>
-            <p style="text-align: center; font-size: 20px; margin: 40px 0; border-left: 4px solid #8B1E3F; padding-left: 20px;">
-                <i>Каждый пиксель в онлайне конвертируется в преимущество на треке. Это битва умов, IT-навыков и реакции.</i>
+            <p style="text-align: center; font-size: 20px; margin: 40px 0; border-left: 4px solid var(--cyber-green); padding-left: 20px; color: var(--ion-light);">
+                <i>500 подростков пройдут обучение, 40 лучших сразятся в финале. Инженерия, IT и спорт — в одном проекте.</i>
             </p>
         </section>
 
-        <!-- Ценности -->
         <section id="values" class="fade-in">
-            <h2 style="font-size: 48px; font-weight: 800; text-align: center;">Наша миссия</h2>
+            <h2 style="font-size: 48px; font-weight: 800; text-align: center; color: var(--white);">Наша миссия</h2>
             <div class="values-grid">
                 <div class="value-card">
                     <div class="value-icon"><i class="fas fa-microchip"></i></div>
-                    <h4>Инновации</h4>
-                    <p>Интеграция IT и спорта. Цифровые двойники трасс, телеметрия, киберкартинг — мы создаём будущее сегодня.</p>
+                    <h4>Технологии</h4>
+                    <p>Разработка уникального симулятора, цифровые двойники трасс, IT‑компетенции для каждого участника.</p>
                 </div>
                 <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="value-icon"><i class="fas fa-helmet-safety"></i></div>
                     <h4>Спорт</h4>
-                    <p>Дух соревнования, скорость, командная работа. Воспитываем характер и волю к победе.</p>
+                    <p>Реальные гонки, командный дух, воспитание воли к победе и здорового образа жизни.</p>
                 </div>
                 <div class="value-card">
                     <div class="value-icon"><i class="fas fa-users"></i></div>
-                    <h4>Социум</h4>
-                    <p>Стираем границы. Картинг доступен каждому. Вовлекаем социально незащищённые группы, даём путёвку в жизнь.</p>
+                    <h4>Образование</h4>
+                    <p>Лекции от инженеров и гонщиков, мастер-классы, профориентация в STEM‑специальности.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Команды -->
         <section id="teams" class="fade-in">
-            <h2 style="font-size: 48px; font-weight: 800; text-align: center;">Команды</h2>
+            <h2 style="font-size: 48px; font-weight: 800; text-align: center; color: var(--white);">Участники</h2>
             <div class="teams-grid">
                 <div class="team-card">
                     <div class="icon"><i class="fas fa-child"></i></div>
                     <h4>Юниоры</h4>
-                    <div class="badge">10–14 лет</div>
-                    <p style="margin-top: 20px;">Первые шаги в мире скорости и технологий. Наставники — профи.</p>
+                    <div class="badge">14–16 лет</div>
+                    <p style="margin-top: 20px;">Первые шаги в мире скорости и технологий под руководством наставников.</p>
                 </div>
                 <div class="team-card">
                     <div class="icon"><i class="fas fa-user-graduate"></i></div>
                     <h4>Студенты</h4>
-                    <div class="badge">15–18 лет</div>
-                    <p style="margin-top: 20px;">Продвинутый уровень. Борьба за лидерство в цифре и на треке.</p>
+                    <div class="badge">16–18 лет</div>
+                    <p style="margin-top: 20px;">Продвинутый уровень, борьба за лидерство в цифре и на треке.</p>
                 </div>
                 <div class="team-card">
-                    <div class="icon"><i class="fas fa-helmet-safety"></i></div>
-                    <h4>Легенды</h4>
-                    <div class="badge">Про-гонщики</div>
-                    <p style="margin-top: 20px;">Опыт и мастерство. Ведут за собой молодёжь, задают темп.</p>
+                    <div class="icon"><i class="fas fa-user-tie"></i></div>
+                    <h4>Наставники</h4>
+                    <div class="badge">Профи</div>
+                    <p style="margin-top: 20px;">Опытные гонщики и инженеры, передающие знания молодёжи.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Дорожная карта (этапы) на основе календарного плана -->
         <section class="roadmap fade-in" id="roadmap">
-            <h2>Календарный план проекта</h2>
+            <h2>Календарный план</h2>
             <div class="track" id="trackContainer">
                 <div class="track-point" data-stage="0"><span>Сбор КП</span>1</div>
                 <div class="track-point" data-stage="1"><span>Закупка</span>2</div>
@@ -768,93 +713,82 @@
                 <div class="track-point" data-stage="3"><span>Обучение</span>4</div>
                 <div class="track-point" data-stage="4"><span>Тренировки</span>5</div>
                 <div class="track-point" data-stage="5"><span>Подготовка</span>6</div>
-                <div class="track-point" data-stage="6"><span>Соревнования</span>7</div>
+                <div class="track-point" data-stage="6"><span>Турнир</span>7</div>
                 <div class="track-point" data-stage="7"><span>Медиа</span>8</div>
+                <div class="track-point" data-stage="8"><span>Итоги</span>9</div>
             </div>
 
-            <!-- Карточки с деталями мероприятий -->
             <div class="stage-cards" id="stageCards">
                 <div class="stage-card" data-stage="0">
                     <h4>1. Сбор коммерческих предложений</h4>
-                    <p class="date">Крайняя дата: 30.07.2026</p>
-                    <p>Формирование реестра подрядчиков по оборудованию и разработке игровой платформы. Выбор по ценовому критерию и срокам.</p>
+                    <p class="date">до 08.08.2026</p>
+                    <p>Запрос КП от поставщиков ПК, ПО (6-8 компаний), анализ.</p>
                     <p><strong>Участники:</strong> 5 чел.</p>
                 </div>
                 <div class="stage-card" data-stage="1">
-                    <h4>2. Приобретение оборудования</h4>
-                    <p class="date">Крайняя дата: 16.08.2026</p>
-                    <p>Заключение договоров, передача оборудования команде, знакомство с платформой и механикой игры.</p>
-                    <p><strong>Участники:</strong> 5 чел. (повторно)</p>
+                    <h4>2. Разработка симулятора и закупка оборудования</h4>
+                    <p class="date">до 30.08.2026</p>
+                    <p>Договор с разработчиком, покупка планшетов, плазм, виндеров.</p>
+                    <p><strong>Участники:</strong> 5 чел.</p>
                 </div>
                 <div class="stage-card" data-stage="2">
                     <h4>3. Формирование образовательной программы</h4>
-                    <p class="date">Крайняя дата: 23.08.2026</p>
-                    <p>Составление плана 10 мастер-классов, лекций по физике авто, программированию, истории машин, вождению.</p>
-                    <p><strong>Участники:</strong> 2 уникума, 5 повторно</p>
+                    <p class="date">до 23.08.2026</p>
+                    <p>Модули: физика гонок, строение карта, тактика, аэродинамика.</p>
+                    <p><strong>Спикеры:</strong> 8 экспертов</p>
                 </div>
                 <div class="stage-card" data-stage="3">
-                    <h4>4. Проведение образовательной программы</h4>
-                    <p class="date">Крайняя дата: 23.09.2026</p>
-                    <p>10 мастер-классов и лекций с приглашением на соревнования. Минимум 15 участников на каждом мероприятии.</p>
-                    <p><strong>Участники:</strong> 100 уникумов, 30 повторно, 15 публикаций, 20000 просмотров</p>
+                    <h4>4. Лекции и мастер-классы</h4>
+                    <p class="date">до 20.09.2026</p>
+                    <p>500 участников, 5 лекций, 6 мастер-классов на F‑Drive Karting.</p>
+                    <p><strong>Публикации:</strong> 15, охват 8000</p>
                 </div>
                 <div class="stage-card" data-stage="4">
-                    <h4>5. Тренировочный сбор</h4>
-                    <p class="date">Крайняя дата: 20.09.2026</p>
-                    <p>Подготовка к фиджитал-соревнованиям: определение команд, тестовые заезды на платформе.</p>
-                    <p><strong>Участники:</strong> 30 уникумов, 10 повторно, 2 публикации, 2000 просмотров</p>
+                    <h4>5. Тренировки команд</h4>
+                    <p class="date">до 27.09.2026</p>
+                    <p>Отбор 40 лучших в 8 команд. Тренировки в симуляторе и на треке.</p>
                 </div>
                 <div class="stage-card" data-stage="5">
                     <h4>6. Подготовка соревнований</h4>
-                    <p class="date">Крайняя дата: 20.09.2026</p>
-                    <p>Определение таймингов, программного хода, судейской коллегии, сбор заявок.</p>
-                    <p><strong>Участники:</strong> 5 уникумов, 10 повторно</p>
+                    <p class="date">до 27.09.2026</p>
+                    <p>Регламент, судейская коллегия, брендирование.</p>
                 </div>
                 <div class="stage-card" data-stage="6">
-                    <h4>7. Фиджитал-соревнования «НН2KART»</h4>
-                    <p class="date">Крайняя дата: 11.10.2026</p>
-                    <p>Проведение диджитал- и физического этапов гонок. Участников около 80, всего более 150 чел. Награждение победителей.</p>
+                    <h4>7. Фиджитал-турнир «НН2КАРТ»</h4>
+                    <p class="date">09.10.2026</p>
+                    <p>Онлайн-этап + офлайн-финал. Награждение победителей.</p>
                 </div>
                 <div class="stage-card" data-stage="7">
                     <h4>8. Медиа-сопровождение</h4>
-                    <p class="date">Крайняя дата: 11.10.2026</p>
-                    <p>Публикация пост- и пресс-релизов, организация фото- и видеосъёмки для соцсетей и СМИ.</p>
-                    <p><strong>Команда:</strong> 3 чел.</p>
+                    <p class="date">до 25.10.2026</p>
+                    <p>32 публикации, пресс-релизы, видеоотчёт, охват >31 200.</p>
+                </div>
+                <div class="stage-card" data-stage="8">
+                    <h4>9. Подведение итогов</h4>
+                    <p class="date">до 25.11.2026</p>
+                    <p>Анализ результатов, отчётность, рекомендации по тиражированию.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Рейтинговая таблица (динамическая) -->
         <section id="rating" class="rating-section fade-in">
             <h2>Рейтинг команд</h2>
             <table class="rating-table" id="ratingTable">
-                <thead>
-                    <tr>
-                        <th>Место</th>
-                        <th>Команда</th>
-                        <th>Баллы</th>
-                    </tr>
-                </thead>
-                <tbody id="ratingBody">
-                    <!-- Данные будут вставлены через JS -->
-                </tbody>
+                <thead><tr><th>Место</th><th>Команда</th><th>Баллы</th></tr></thead>
+                <tbody id="ratingBody"></tbody>
             </table>
-            <!-- Скрытая кнопка для добавления команд (квадратик) -->
-            <div class="rating-admin-btn" onclick="openModal('ratingAdminModal')">
-                <i class="fas fa-cog"></i>
-            </div>
+            <div class="rating-admin-btn" onclick="openModal('ratingAdminModal')"><i class="fas fa-cog"></i></div>
         </section>
 
-        <!-- Футер -->
         <footer>
-            <div class="logo" style="font-size: 40px; margin-bottom: 20px;">НН2KART</div>
+            <div class="logo" style="font-size: 40px; margin-bottom: 20px;">НН2КАРТ<sup>®</sup></div>
             <div class="footer-links">
                 <a href="#hero">О проекте</a>
                 <a href="#">Новости</a>
                 <a href="#">Контакты</a>
                 <a href="#">Документы</a>
             </div>
-            <p style="opacity: 0.6;">&copy; 2026 НН2KART. Все права защищены. Первый фиджитал-чемпионат России.</p>
+            <p>&copy; 2026 НН2КАРТ. Проект реализуется при поддержке Росмолодёжи.</p>
         </footer>
     </div>
 
@@ -862,16 +796,16 @@
     <div id="aboutModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('aboutModal')">&times;</span>
-            <h3>О проекте НН2KART</h3>
-            <p><strong>Краткая информация:</strong> «НН2KART» — первый в России фиджитал-чемпионат по картингу. Команды подростков (10–18 лет) и профессиональных гонщиков соревнуются сначала в онлайн-симуляторе на цифровом двойнике реальной трассы, а затем в офлайн-финале на картодроме. Результаты онлайн-этапа влияют на условия реальной гонки.</p>
-            <p><strong>Цель:</strong> создать и апробировать до октября 2026 года модель интеграционного кластера, вовлечь не менее 60 детей (включая 10% из социально уязвимых групп) в системную спортивно-техническую деятельность.</p>
-            <p><strong>Задачи:</strong> закупка оборудования и разработка платформы, образовательные мероприятия, тренировочный сбор, информационное сопровождение, проведение соревнований.</p>
-            <p><strong>Опыт организаторов:</strong> турниры по хоккею, фиджитал-баскетболу, волейболу, мастер-классы, фестивали русской культуры, палаточные лагеря и сплавы.</p>
-            <p><strong>Перспективы:</strong> тиражирование модели в регионы, развитие как научно-образовательного центра, подготовка кадров для IT и спорта.</p>
+            <h3>О проекте НН2КАРТ</h3>
+            <p><strong>Инженерно-спортивный картинг «НН2КАРТ»</strong> — первый в России фиджитал-чемпионат, объединяющий симуляционный спорт, технологическое образование и реальные гонки.</p>
+            <p><strong>Цель:</strong> создать и апробировать до 11.10.2026 модель образовательного кластера, вовлечь 500 подростков, повысить их компетенции в STEM и спорте.</p>
+            <p><strong>Задачи:</strong> закупка оборудования и разработка симулятора, проведение лекций и мастер-классов, тренировочный сбор, фиджитал-турнир, информационное сопровождение.</p>
+            <p><strong>Опыт команды:</strong> организация турниров по хоккею, баскетболу, фестиваля «ТехноСтрелка», работа с молодёжью, грантовая поддержка.</p>
+            <p><strong>Перспективы:</strong> тиражирование модели в регионы, создание кадрового резерва для автоспорта и IT.</p>
         </div>
     </div>
 
-    <!-- Модальное окно для администрирования рейтинга (скрытая кнопка) -->
+    <!-- Модальное окно управления рейтингом -->
     <div id="ratingAdminModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('ratingAdminModal')">&times;</span>
@@ -883,161 +817,88 @@
                 </div>
                 <div class="form-group">
                     <label>Баллы</label>
-                    <input type="number" id="teamScore" required min="0" step="1">
+                    <input type="number" id="teamScore" required min="0">
                 </div>
-                <button type="submit" class="btn btn-primary btn-small">Добавить команду</button>
+                <button type="submit" class="btn btn-primary btn-small">Добавить</button>
             </form>
-            <div class="rating-list" id="ratingList">
-                <!-- Здесь будут отображаться добавленные команды с возможностью удаления -->
-            </div>
+            <div class="rating-list" id="ratingList"></div>
         </div>
     </div>
 
     <script>
-        // Функции для модальных окон
         function openModal(id) {
             document.getElementById(id).classList.add('active');
             document.body.style.overflow = 'hidden';
-            if (id === 'ratingAdminModal') {
-                renderRatingList(); // обновляем список в админке
-            }
+            if (id === 'ratingAdminModal') renderRatingList();
         }
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
             document.body.style.overflow = '';
         }
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
+        window.onclick = function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
                 document.body.style.overflow = '';
             }
         }
 
-        // Работа с этапами: при наведении на точку показываем карточку
-        const trackPoints = document.querySelectorAll('.track-point');
-        const stageCards = document.querySelectorAll('.stage-card');
-        trackPoints.forEach(point => {
-            point.addEventListener('mouseenter', function() {
-                const stageIndex = this.getAttribute('data-stage');
-                stageCards.forEach(card => {
-                    card.classList.remove('active');
-                    if (card.getAttribute('data-stage') === stageIndex) {
-                        card.classList.add('active');
-                    }
+        // Этапы
+        document.querySelectorAll('.track-point').forEach(p => {
+            p.addEventListener('mouseenter', function() {
+                const stage = this.dataset.stage;
+                document.querySelectorAll('.stage-card').forEach(c => {
+                    c.classList.toggle('active', c.dataset.stage === stage);
                 });
             });
         });
 
-        // Анимация появления при скролле
-        const fadeElements = document.querySelectorAll('.fade-in');
+        // Анимация появления
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.1 });
-        fadeElements.forEach(el => observer.observe(el));
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Телеметрия в hero-изображении
-        window.addEventListener('load', function() {
-            const heroImage = document.querySelector('.hero-image');
-            const telemetry = document.createElement('div');
-            telemetry.style.position = 'absolute';
-            telemetry.style.bottom = '20px';
-            telemetry.style.right = '20px';
-            telemetry.style.background = 'rgba(0,0,0,0.7)';
-            telemetry.style.padding = '10px 20px';
-            telemetry.style.borderRadius = '20px';
-            telemetry.style.fontFamily = 'monospace';
-            telemetry.style.color = '#b6ff1a';
-            telemetry.style.border = '1px solid #3a86ff';
-            telemetry.style.zIndex = '10';
-            heroImage.style.position = 'relative';
-            heroImage.appendChild(telemetry);
-
-            let speed = 0;
-            setInterval(() => {
-                speed = Math.floor(Math.random() * 100) + 50;
-                telemetry.innerHTML = `Скорость: ${speed} km/h | Круг: ${Math.floor(Math.random()*60)+1}:${Math.floor(Math.random()*60)}`;
-            }, 1000);
-        });
-
-        // --- Рейтинг (динамический, с сохранением в localStorage) ---
+        // Рейтинг
         let ratingData = JSON.parse(localStorage.getItem('ratingData')) || [];
-
-        function saveRating() {
-            localStorage.setItem('ratingData', JSON.stringify(ratingData));
-        }
-
-        // Функция сортировки рейтинга по баллам (убывание) и обновления таблицы
+        function saveRating() { localStorage.setItem('ratingData', JSON.stringify(ratingData)); }
         function updateRatingTable() {
             const tbody = document.getElementById('ratingBody');
-            if (!tbody) return;
-            if (ratingData.length === 0) {
+            if (!ratingData.length) {
                 tbody.innerHTML = `<tr><td colspan="3" class="empty-message">Рейтинг появится после регистрации участников</td></tr>`;
                 return;
             }
-            // Сортируем по баллам (по убыванию)
-            const sorted = [...ratingData].sort((a, b) => b.score - a.score);
-            let html = '';
-            sorted.forEach((item, index) => {
-                html += `<tr>
-                    <td>${index + 1}</td>
-                    <td>${item.team}</td>
-                    <td>${item.score}</td>
-                </tr>`;
-            });
-            tbody.innerHTML = html;
+            const sorted = [...ratingData].sort((a,b) => b.score - a.score);
+            tbody.innerHTML = sorted.map((item, i) => `<tr><td>${i+1}</td><td>${item.team}</td><td>${item.score}</td></tr>`).join('');
         }
-
-        // Отображение списка команд в админке (с кнопками удаления)
         function renderRatingList() {
-            const listContainer = document.getElementById('ratingList');
-            if (!listContainer) return;
-            if (ratingData.length === 0) {
-                listContainer.innerHTML = '<p style="opacity:0.7;">Пока нет добавленных команд</p>';
-                return;
-            }
-            let html = '';
-            ratingData.forEach((item, index) => {
-                html += `<div class="rating-item">
+            const list = document.getElementById('ratingList');
+            if (!ratingData.length) { list.innerHTML = '<p style="opacity:0.7;">Пока нет команд</p>'; return; }
+            list.innerHTML = ratingData.map((item, idx) => `
+                <div class="rating-item">
                     <span>${item.team} — ${item.score} баллов</span>
-                    <button onclick="deleteRatingEntry(${index})"><i class="fas fa-trash"></i></button>
-                </div>`;
-            });
-            listContainer.innerHTML = html;
+                    <button onclick="deleteRatingEntry(${idx})"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
         }
-
-        // Добавление новой записи из формы
-        function addRatingEntry(event) {
-            event.preventDefault();
-            const teamName = document.getElementById('teamName').value.trim();
-            const teamScore = parseInt(document.getElementById('teamScore').value, 10);
-            if (teamName && !isNaN(teamScore)) {
-                ratingData.push({ team: teamName, score: teamScore });
+        window.addRatingEntry = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('teamName').value.trim();
+            const score = parseInt(document.getElementById('teamScore').value, 10);
+            if (name && !isNaN(score)) {
+                ratingData.push({ team: name, score });
                 saveRating();
                 updateRatingTable();
                 renderRatingList();
                 document.getElementById('addRatingForm').reset();
-                // Не закрываем модальное окно, чтобы можно было добавить ещё
             }
-        }
-
-        // Удаление записи
-        function deleteRatingEntry(index) {
-            ratingData.splice(index, 1);
+        };
+        window.deleteRatingEntry = function(idx) {
+            ratingData.splice(idx, 1);
             saveRating();
             updateRatingTable();
             renderRatingList();
-        }
-
-        // Инициализация таблицы при загрузке
+        };
         updateRatingTable();
-
-        // Делаем функции глобальными для вызова из HTML
-        window.addRatingEntry = addRatingEntry;
-        window.deleteRatingEntry = deleteRatingEntry;
         window.openModal = openModal;
         window.closeModal = closeModal;
     </script>
