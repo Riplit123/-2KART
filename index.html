@@ -1,906 +1,310 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>НН2КАРТ — Инженерно-спортивный картинг</title>
-    <!-- Шрифт Poppins (брендбук) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Брендбук цвета */
-        :root {
-            --graphite: #08070D;    /* Абсолютный графит */
-            --ion-light: #DEF9F6;    /* Ионный свет */
-            --cyber-green: #54D830;  /* Кибер-зеленый */
-            --white: #FCFFCF;        /* Белый */
-            --tech-blue: #2C9FE2;    /* Техно-синий */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Оцените тестирование</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  html, body {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 30%, #2b1055 0%, #12082e 60%, #090418 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    user-select: none;
+    touch-action: manipulation;
+  }
 
-        body {
-            background-color: var(--graphite);
-            color: var(--white);
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.5;
-            overflow-x: hidden;
-            position: relative;
-        }
+  /* Надпись по центру */
+  #title {
+    position: fixed;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 84%;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.5);
+    z-index: 5;
+    pointer-events: none;
+  }
+  #title small {
+    display: block;
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: .7;
+  }
 
-        /* Фоновая сетка (ионный свет с низкой непрозрачностью) */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(84, 216, 48, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(84, 216, 48, 0.08) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
-            animation: parallax 20s linear infinite alternate;
-        }
+  /* Сердечко */
+  #heart {
+    position: fixed;
+    top: 0; left: 0;
+    width: 76px;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    cursor: pointer;
+    z-index: 10;
+    will-change: transform;
+    /* базовая позиция задаётся через transform в JS */
+    filter: drop-shadow(0 4px 14px rgba(255,0,80,.6));
+  }
+  /* эмодзи-сердечко: покачивание/дрожь теперь включается ТОЛЬКО во время
+     "дразнящих приступов" через класс .taunt (управляется из JS) */
+  #heart .emoji {
+    display: inline-block;
+    will-change: transform;
+  }
+  #heart .emoji.taunt {
+    animation: jiggle .18s ease-in-out infinite;
+  }
+  @keyframes jiggle {
+    0%   { transform: rotate(-16deg) scale(1.05); }
+    25%  { transform: rotate(14deg)  scale(1.18); }
+    50%  { transform: rotate(-12deg) scale(.92);  }
+    75%  { transform: rotate(16deg)  scale(1.15); }
+    100% { transform: rotate(-16deg) scale(1.05); }
+  }
 
-        @keyframes parallax {
-            0% { transform: translateY(0) translateX(0); }
-            100% { transform: translateY(-20px) translateX(-10px); }
-        }
+  /* Экран победы */
+  #win {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at 50% 40%, rgba(255,40,120,.25), rgba(9,4,24,.96));
+    color: #fff;
+    padding: 24px;
+  }
+  #win.show { display: flex; animation: fadeIn .4s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #win .bigheart {
+    font-size: 110px;
+    animation: pop .6s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop {
+    0%   { transform: scale(0); }
+    70%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+  #win h2 { font-size: 26px; margin: 18px 0 8px; }
+  #win p  { font-size: 16px; opacity: .8; margin: 0; }
 
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Кнопки */
-        .btn {
-            display: inline-block;
-            padding: 12px 32px;
-            border-radius: 40px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            text-align: center;
-            font-family: 'Poppins', sans-serif;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--cyber-green), var(--tech-blue));
-            color: var(--graphite);
-            box-shadow: 0 0 20px rgba(84, 216, 48, 0.5);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(84, 216, 48, 0.8);
-        }
-        .btn-outline {
-            background: rgba(8, 7, 13, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--cyber-green);
-            color: var(--white);
-            margin-left: 16px;
-        }
-        .btn-outline:hover {
-            background: rgba(84, 216, 48, 0.2);
-            border-color: var(--cyber-green);
-        }
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-
-        /* Хедер */
-        header {
-            padding: 30px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, var(--cyber-green), var(--tech-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
-        .logo sup {
-            font-size: 16px;
-            background: none;
-            -webkit-text-fill-color: var(--cyber-green);
-            color: var(--cyber-green);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            font-size: 16px;
-        }
-        .nav-links a:hover {
-            color: var(--cyber-green);
-        }
-
-        /* Hero */
-        .hero {
-            padding: 60px 0 100px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .hero-title {
-            font-size: 64px;
-            font-weight: 800;
-            line-height: 1.1;
-            text-transform: uppercase;
-        }
-        .hero-title .line1 {
-            display: block;
-            color: var(--ion-light);
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: 2px;
-        }
-        .hero-title .line2 {
-            display: block;
-            color: var(--cyber-green);
-            font-size: 72px;
-        }
-        .hero-title .line3 {
-            display: block;
-            font-size: 28px;
-            font-weight: 600;
-            margin-top: 20px;
-            color: var(--white);
-        }
-
-        .hero-buttons {
-            margin-top: 40px;
-        }
-
-        .hero-image {
-            position: relative;
-            height: 400px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" opacity="0.9"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%2354D830"/><stop offset="100%" stop-color="%232C9FE2"/></linearGradient></defs><rect width="800" height="600" fill="%2308070D"/><g stroke="url(%23grad)" stroke-width="3" fill="none"><circle cx="400" cy="300" r="150"/><circle cx="400" cy="300" r="100"/><circle cx="400" cy="300" r="50"/><line x1="200" y1="150" x2="600" y2="450" stroke-dasharray="10 10"/><line x1="200" y1="450" x2="600" y2="150" stroke-dasharray="10 10"/></g><text x="400" y="320" font-family="Poppins" font-size="52" fill="%23FCFFCF" text-anchor="middle" font-weight="800" dy=".3em">KART</text></svg>') no-repeat center/contain;
-            filter: drop-shadow(0 0 20px var(--cyber-green));
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* Split screen */
-        .split-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            margin: 100px 0;
-            border-radius: 30px;
-            overflow: hidden;
-            border: 1px solid rgba(84, 216, 48, 0.3);
-        }
-
-        .split-left, .split-right {
-            padding: 60px 40px;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .split-left {
-            background: linear-gradient(135deg, rgba(8,7,13,0.9), rgba(44, 159, 226, 0.15));
-            border-right: 2px solid var(--tech-blue);
-        }
-        .split-right {
-            background: linear-gradient(135deg, rgba(8,7,13,0.9), rgba(84, 216, 48, 0.1));
-        }
-
-        .split-left h3, .split-right h3 {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
-        .split-left h3 { color: var(--tech-blue); }
-        .split-right h3 { color: var(--cyber-green); }
-
-        .split-left p, .split-right p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            color: var(--ion-light);
-        }
-
-        /* Values */
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin: 80px 0;
-        }
-
-        .value-card {
-            background: rgba(8,7,13,0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(84, 216, 48, 0.3);
-            border-radius: 30px;
-            padding: 40px 30px;
-            text-align: center;
-            transition: all 0.4s;
-        }
-        .value-card:hover {
-            transform: translateY(-15px);
-            border-color: var(--cyber-green);
-            box-shadow: 0 0 40px rgba(84, 216, 48, 0.4);
-        }
-
-        .value-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            color: var(--cyber-green);
-            text-shadow: 0 0 15px var(--cyber-green);
-        }
-        .value-card h4 {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, var(--cyber-green), var(--tech-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .value-card p {
-            color: var(--ion-light);
-        }
-
-        /* Teams */
-        .teams-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin: 60px 0;
-        }
-
-        .team-card {
-            background: rgba(8,7,13,0.5);
-            border-radius: 30px;
-            padding: 40px 20px;
-            text-align: center;
-            border: 1px solid rgba(44, 159, 226, 0.3);
-            transition: 0.3s;
-        }
-        .team-card:hover {
-            border-color: var(--tech-blue);
-            transform: scale(1.02);
-        }
-        .team-card .icon {
-            font-size: 50px;
-            color: var(--tech-blue);
-            margin-bottom: 20px;
-        }
-        .team-card h4 {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--white);
-        }
-        .team-card .badge {
-            display: inline-block;
-            background: var(--cyber-green);
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--graphite);
-        }
-        .team-card p {
-            color: var(--ion-light);
-        }
-
-        /* Roadmap */
-        .roadmap {
-            margin: 100px 0;
-        }
-        .roadmap h2 {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 60px;
-            text-align: center;
-            color: var(--white);
-        }
-        .track {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            padding: 40px 0;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .track::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--cyber-green), var(--tech-blue));
-            transform: translateY(-50%);
-            z-index: 1;
-            border-radius: 2px;
-        }
-        .track-point {
-            background: var(--graphite);
-            border: 3px solid var(--cyber-green);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 20px;
-            color: var(--white);
-            position: relative;
-            z-index: 2;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .track-point:hover {
-            border-color: var(--tech-blue);
-            transform: scale(1.2);
-            box-shadow: 0 0 30px var(--tech-blue);
-        }
-        .track-point span {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--ion-light);
-        }
-
-        .stage-cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 60px;
-            justify-content: center;
-            min-height: 250px;
-        }
-        .stage-card {
-            background: rgba(8,7,13,0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--cyber-green);
-            border-radius: 20px;
-            padding: 30px;
-            width: 320px;
-            display: none;
-            border-top: 4px solid var(--cyber-green);
-        }
-        .stage-card.active {
-            display: block;
-            animation: fadeInCard 0.3s;
-        }
-        @keyframes fadeInCard {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .stage-card h4 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: var(--cyber-green);
-        }
-        .stage-card .date {
-            color: var(--tech-blue);
-            font-weight: 600;
-        }
-        .stage-card p {
-            color: var(--ion-light);
-        }
-
-        /* Rating */
-        .rating-section {
-            margin: 80px 0;
-            padding: 40px;
-            background: rgba(8,7,13,0.6);
-            border-radius: 30px;
-            border: 1px solid var(--tech-blue);
-        }
-        .rating-section h2 {
-            font-size: 36px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: var(--white);
-        }
-        .rating-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .rating-table th {
-            padding: 15px;
-            background: var(--tech-blue);
-            color: var(--graphite);
-            font-weight: 800;
-        }
-        .rating-table td {
-            padding: 15px;
-            border-bottom: 1px solid rgba(222, 249, 246, 0.2);
-            color: var(--ion-light);
-        }
-        .rating-admin-btn {
-            width: 40px;
-            height: 40px;
-            background: #1a1a2a;
-            border: 1px solid var(--cyber-green);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px auto 0;
-            cursor: pointer;
-            opacity: 0.3;
-            transition: 0.3s;
-            color: var(--cyber-green);
-            font-size: 20px;
-        }
-        .rating-admin-btn:hover {
-            opacity: 1;
-            background: var(--cyber-green);
-            color: var(--graphite);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(8,7,13,0.9);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--graphite);
-            padding: 40px;
-            border-radius: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid var(--cyber-green);
-            box-shadow: 0 0 40px rgba(84, 216, 48, 0.3);
-        }
-        .modal-content h3 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: var(--cyber-green);
-        }
-        .modal-content p {
-            color: var(--ion-light);
-        }
-        .modal-content .close {
-            float: right;
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--white);
-        }
-        .modal-content .close:hover {
-            color: var(--cyber-green);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: var(--cyber-green);
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--tech-blue);
-            background: rgba(222, 249, 246, 0.1);
-            color: var(--white);
-        }
-        .rating-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px;
-            border-bottom: 1px solid var(--tech-blue);
-            color: var(--ion-light);
-        }
-        .rating-item button {
-            background: none;
-            border: none;
-            color: var(--cyber-green);
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        footer {
-            padding: 50px 0;
-            text-align: center;
-            border-top: 1px solid rgba(84, 216, 48, 0.3);
-            margin-top: 80px;
-        }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
-        }
-        .footer-links a {
-            color: var(--ion-light);
-            text-decoration: none;
-            opacity: 0.8;
-        }
-        .footer-links a:hover {
-            opacity: 1;
-            color: var(--cyber-green);
-        }
-        footer p {
-            color: var(--ion-light);
-            opacity: 0.7;
-        }
-
-        /* Адаптив */
-        @media (max-width: 1024px) {
-            .hero { grid-template-columns: 1fr; text-align: center; }
-            .hero-image { height: 300px; }
-            .split-section, .values-grid, .teams-grid { grid-template-columns: 1fr; }
-            .track::before { display: none; }
-        }
-        @media (max-width: 768px) {
-            .container { padding: 0 20px; }
-            header { flex-direction: column; gap: 20px; }
-            .hero-title { font-size: 48px; }
-            .hero-title .line2 { font-size: 56px; }
-        }
-    </style>
+  /* Счётчик попыток */
+  #tries {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    opacity: .55;
+    font-size: 14px;
+    z-index: 5;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">НН2КАРТ<sup>®</sup></div>
-            <div class="nav-links">
-                <a href="#concept">Концепция</a>
-                <a href="#values">Ценности</a>
-                <a href="#teams">Команды</a>
-                <a href="#roadmap">Этапы</a>
-                <a href="#rating">Рейтинг</a>
-            </div>
-        </header>
 
-        <section class="hero fade-in" id="hero">
-            <div>
-                <h1 class="hero-title">
-                    <span class="line1">ПЕРВЫЙ В РОССИИ ФИДЖИТАЛ-ЧЕМПИОНАТ</span>
-                    <span class="line2">НН2КАРТ</span>
-                    <span class="line3">НАЖМИ ГАЗ В ЦИФРЕ — ДОЖМИ В РЕАЛЕ</span>
-                </h1>
-                <div class="hero-buttons">
-                    <a href="https://forms.yandex.ru/u/69b2a77b49af471ecb411351" class="btn btn-primary" target="_blank">Стать участником</a>
-                    <button class="btn btn-outline" onclick="openModal('aboutModal')">О проекте</button>
-                </div>
-            </div>
-            <div class="hero-image"></div>
-        </section>
+  <div id="title">
+    Оцените проведённое тестирование, нажав на сердечко)
+    <small></small>
+  </div>
 
-        <section id="concept" class="fade-in">
-            <h2 style="font-size: 48px; font-weight: 800; margin-bottom: 20px; color: var(--white);">Как это работает</h2>
-            <div class="split-section">
-                <div class="split-left">
-                    <h3>DIGITAL STAGE</h3>
-                    <p>Команды соревнуются в симуляторе на цифровом двойнике реальной трассы. Каждый участник управляет своей ролью: пилот, механик, стратег, программист.</p>
-                    <i class="fas fa-gamepad" style="font-size: 40px; color: var(--tech-blue);"></i>
-                </div>
-                <div class="split-right">
-                    <h3>REAL RACE</h3>
-                    <p>Офлайн-финал на картодроме F‑Drive. Результаты онлайна влияют на стартовые позиции. Адреналин, скорость, командная работа.</p>
-                    <i class="fas fa-flag-checkered" style="font-size: 40px; color: var(--cyber-green);"></i>
-                </div>
-            </div>
-            <p style="text-align: center; font-size: 20px; margin: 40px 0; border-left: 4px solid var(--cyber-green); padding-left: 20px; color: var(--ion-light);">
-                <i>500 подростков пройдут обучение, 40 лучших сразятся в финале. Инженерия, IT и спорт — в одном проекте.</i>
-            </p>
-        </section>
+  <div id="heart"><span class="emoji">❤️</span></div>
 
-        <section id="values" class="fade-in">
-            <h2 style="font-size: 48px; font-weight: 800; text-align: center; color: var(--white);">Наша миссия</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-microchip"></i></div>
-                    <h4>Технологии</h4>
-                    <p>Разработка уникального симулятора, цифровые двойники трасс, IT‑компетенции для каждого участника.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-helmet-safety"></i></div>
-                    <h4>Спорт</h4>
-                    <p>Реальные гонки, командный дух, воспитание воли к победе и здорового образа жизни.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon"><i class="fas fa-users"></i></div>
-                    <h4>Образование</h4>
-                    <p>Лекции от инженеров и гонщиков, мастер-классы, профориентация в STEM‑специальности.</p>
-                </div>
-            </div>
-        </section>
+  <div id="tries">Попыток: 0</div>
 
-        <section id="teams" class="fade-in">
-            <h2 style="font-size: 48px; font-weight: 800; text-align: center; color: var(--white);">Участники</h2>
-            <div class="teams-grid">
-                <div class="team-card">
-                    <div class="icon"><i class="fas fa-child"></i></div>
-                    <h4>Юниоры</h4>
-                    <div class="badge">14–16 лет</div>
-                    <p style="margin-top: 20px;">Первые шаги в мире скорости и технологий под руководством наставников.</p>
-                </div>
-                <div class="team-card">
-                    <div class="icon"><i class="fas fa-user-graduate"></i></div>
-                    <h4>Студенты</h4>
-                    <div class="badge">16–18 лет</div>
-                    <p style="margin-top: 20px;">Продвинутый уровень, борьба за лидерство в цифре и на треке.</p>
-                </div>
-                <div class="team-card">
-                    <div class="icon"><i class="fas fa-user-tie"></i></div>
-                    <h4>Наставники</h4>
-                    <div class="badge">Профи</div>
-                    <p style="margin-top: 20px;">Опытные гонщики и инженеры, передающие знания молодёжи.</p>
-                </div>
-            </div>
-        </section>
+  <div id="win">
+    <div class="bigheart">💖</div>
+    <h2>Спасибо за оценку!</h2>
+    <p>Тестирование оценено на все 100 ❤️</p>
+  </div>
 
-        <section class="roadmap fade-in" id="roadmap">
-            <h2>Календарный план</h2>
-            <div class="track" id="trackContainer">
-                <div class="track-point" data-stage="0"><span>Сбор КП</span>1</div>
-                <div class="track-point" data-stage="1"><span>Закупка</span>2</div>
-                <div class="track-point" data-stage="2"><span>Программа</span>3</div>
-                <div class="track-point" data-stage="3"><span>Обучение</span>4</div>
-                <div class="track-point" data-stage="4"><span>Тренировки</span>5</div>
-                <div class="track-point" data-stage="5"><span>Подготовка</span>6</div>
-                <div class="track-point" data-stage="6"><span>Турнир</span>7</div>
-                <div class="track-point" data-stage="7"><span>Медиа</span>8</div>
-                <div class="track-point" data-stage="8"><span>Итоги</span>9</div>
-            </div>
+  <script>
+    const heart   = document.getElementById('heart');
+    const winEl    = document.getElementById('win');
+    const triesEl = document.getElementById('tries');
 
-            <div class="stage-cards" id="stageCards">
-                <div class="stage-card" data-stage="0">
-                    <h4>1. Сбор коммерческих предложений</h4>
-                    <p class="date">до 08.08.2026</p>
-                    <p>Запрос КП от поставщиков ПК, ПО (6-8 компаний), анализ.</p>
-                    <p><strong>Участники:</strong> 5 чел.</p>
-                </div>
-                <div class="stage-card" data-stage="1">
-                    <h4>2. Разработка симулятора и закупка оборудования</h4>
-                    <p class="date">до 30.08.2026</p>
-                    <p>Договор с разработчиком, покупка планшетов, плазм, виндеров.</p>
-                    <p><strong>Участники:</strong> 5 чел.</p>
-                </div>
-                <div class="stage-card" data-stage="2">
-                    <h4>3. Формирование образовательной программы</h4>
-                    <p class="date">до 23.08.2026</p>
-                    <p>Модули: физика гонок, строение карта, тактика, аэродинамика.</p>
-                    <p><strong>Спикеры:</strong> 8 экспертов</p>
-                </div>
-                <div class="stage-card" data-stage="3">
-                    <h4>4. Лекции и мастер-классы</h4>
-                    <p class="date">до 20.09.2026</p>
-                    <p>500 участников, 5 лекций, 6 мастер-классов на F‑Drive Karting.</p>
-                    <p><strong>Публикации:</strong> 15, охват 8000</p>
-                </div>
-                <div class="stage-card" data-stage="4">
-                    <h4>5. Тренировки команд</h4>
-                    <p class="date">до 27.09.2026</p>
-                    <p>Отбор 40 лучших в 8 команд. Тренировки в симуляторе и на треке.</p>
-                </div>
-                <div class="stage-card" data-stage="5">
-                    <h4>6. Подготовка соревнований</h4>
-                    <p class="date">до 27.09.2026</p>
-                    <p>Регламент, судейская коллегия, брендирование.</p>
-                </div>
-                <div class="stage-card" data-stage="6">
-                    <h4>7. Фиджитал-турнир «НН2КАРТ»</h4>
-                    <p class="date">09.10.2026</p>
-                    <p>Онлайн-этап + офлайн-финал. Награждение победителей.</p>
-                </div>
-                <div class="stage-card" data-stage="7">
-                    <h4>8. Медиа-сопровождение</h4>
-                    <p class="date">до 25.10.2026</p>
-                    <p>32 публикации, пресс-релизы, видеоотчёт, охват >31 200.</p>
-                </div>
-                <div class="stage-card" data-stage="8">
-                    <h4>9. Подведение итогов</h4>
-                    <p class="date">до 25.11.2026</p>
-                    <p>Анализ результатов, отчётность, рекомендации по тиражированию.</p>
-                </div>
-            </div>
-        </section>
+    const HEART_SIZE = 76;
+    let tries = 0;
+    let caught = false;
 
-        <section id="rating" class="rating-section fade-in">
-            <h2>Рейтинг команд</h2>
-            <table class="rating-table" id="ratingTable">
-                <thead><tr><th>Место</th><th>Команда</th><th>Баллы</th></tr></thead>
-                <tbody id="ratingBody"></tbody>
-            </table>
-            <div class="rating-admin-btn" onclick="openModal('ratingAdminModal')"><i class="fas fa-cog"></i></div>
-        </section>
+    // Текущая и целевая позиция
+    let x = 0, y = 0;      // текущая (для плавного скольжения)
+    let tx = 0, ty = 0;    // цель
+    // амплитуда "дразнящего" покачивания
+    let wobbleT = 0;
 
-        <footer>
-            <div class="logo" style="font-size: 40px; margin-bottom: 20px;">НН2КАРТ<sup>®</sup></div>
-            <div class="footer-links">
-                <a href="#hero">О проекте</a>
-                <a href="#">Новости</a>
-                <a href="#">Контакты</a>
-                <a href="#">Документы</a>
-            </div>
-            <p>&copy; 2026 НН2КАРТ. Проект реализуется при поддержке Росмолодёжи.</p>
-        </footer>
-    </div>
+    function rand(min, max) { return Math.random() * (max - min) + min; }
 
-    <!-- Модальное окно "О проекте" -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('aboutModal')">&times;</span>
-            <h3>О проекте НН2КАРТ</h3>
-            <p><strong>Инженерно-спортивный картинг «НН2КАРТ»</strong> — первый в России фиджитал-чемпионат, объединяющий симуляционный спорт, технологическое образование и реальные гонки.</p>
-            <p><strong>Цель:</strong> создать и апробировать до 11.10.2026 модель образовательного кластера, вовлечь 500 подростков, повысить их компетенции в STEM и спорте.</p>
-            <p><strong>Задачи:</strong> закупка оборудования и разработка симулятора, проведение лекций и мастер-классов, тренировочный сбор, фиджитал-турнир, информационное сопровождение.</p>
-            <p><strong>Опыт команды:</strong> организация турниров по хоккею, баскетболу, фестиваля «ТехноСтрелка», работа с молодёжью, грантовая поддержка.</p>
-            <p><strong>Перспективы:</strong> тиражирование модели в регионы, создание кадрового резерва для автоспорта и IT.</p>
-        </div>
-    </div>
+    // Границы, чтобы сердечко не убегало за экран (учитываем зону надписи сверху)
+    function bounds() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const topSafe = h * 0.28;      // ниже надписи
+      const botSafe = h * 0.90;      // выше счётчика
+      return {
+        minX: 8,
+        maxX: w - HEART_SIZE - 8,
+        minY: topSafe,
+        maxY: botSafe - HEART_SIZE
+      };
+    }
 
-    <!-- Модальное окно управления рейтингом -->
-    <div id="ratingAdminModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('ratingAdminModal')">&times;</span>
-            <h3>Управление рейтингом</h3>
-            <form id="addRatingForm" onsubmit="addRatingEntry(event)">
-                <div class="form-group">
-                    <label>Название команды</label>
-                    <input type="text" id="teamName" required>
-                </div>
-                <div class="form-group">
-                    <label>Баллы</label>
-                    <input type="number" id="teamScore" required min="0">
-                </div>
-                <button type="submit" class="btn btn-primary btn-small">Добавить</button>
-            </form>
-            <div class="rating-list" id="ratingList"></div>
-        </div>
-    </div>
+    // Выбрать новую случайную цель подальше от текущей позиции
+    function pickTarget() {
+      const b = bounds();
+      let nx, ny, dist, guard = 0;
+      do {
+        nx = rand(b.minX, b.maxX);
+        ny = rand(b.minY, b.maxY);
+        dist = Math.hypot(nx - x, ny - y);
+        guard++;
+      } while (dist < Math.min(window.innerWidth, window.innerHeight) * 0.35 && guard < 20);
+      tx = nx; ty = ny;
+    }
 
-    <script>
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            document.body.style.overflow = 'hidden';
-            if (id === 'ratingAdminModal') renderRatingList();
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        window.onclick = function(e) {
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
+    // Инициализация стартовой позиции — по центру
+    function initPos() {
+      const b = bounds();
+      x = tx = (b.minX + b.maxX) / 2;
+      y = ty = (b.minY + b.maxY) / 2;
+    }
+    initPos();
 
-        // Этапы
-        document.querySelectorAll('.track-point').forEach(p => {
-            p.addEventListener('mouseenter', function() {
-                const stage = this.dataset.stage;
-                document.querySelectorAll('.stage-card').forEach(c => {
-                    c.classList.toggle('active', c.dataset.stage === stage);
-                });
-            });
-        });
+    // Периодически меняем цель — сердечко "телепорт-скользит" по экрану.
+    // Быстро и непредсказуемо: короткие случайные интервалы.
+    let hopTimer;
+    function scheduleHop() {
+      const delay = rand(230, 520);   // как часто менять направление (меньше = быстрее)
+      hopTimer = setTimeout(() => {
+        if (!caught) { pickTarget(); scheduleHop(); }
+      }, delay);
+    }
+    scheduleHop();
 
-        // Анимация появления
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    // Реакция "убегания", если палец/курсор близко — сердечко резко отпрыгивает
+    function fleeFrom(px, py) {
+      if (caught) return;
+      const cx = x + HEART_SIZE / 2;
+      const cy = y + HEART_SIZE / 2;
+      const d = Math.hypot(px - cx, py - cy);
+      if (d < 130) {         // зона испуга
+        pickTarget();        // сразу новая цель
+        // добавим резкий рывок в противоположную сторону
+        const b = bounds();
+        const away = 170;
+        let ax = cx + (cx - px) / (d || 1) * away;
+        let ay = cy + (cy - py) / (d || 1) * away;
+        tx = Math.max(b.minX, Math.min(b.maxX, ax - HEART_SIZE/2));
+        ty = Math.max(b.minY, Math.min(b.maxY, ay - HEART_SIZE/2));
+      }
+    }
 
-        // Рейтинг
-        let ratingData = JSON.parse(localStorage.getItem('ratingData')) || [];
-        function saveRating() { localStorage.setItem('ratingData', JSON.stringify(ratingData)); }
-        function updateRatingTable() {
-            const tbody = document.getElementById('ratingBody');
-            if (!ratingData.length) {
-                tbody.innerHTML = `<tr><td colspan="3" class="empty-message">Рейтинг появится после регистрации участников</td></tr>`;
-                return;
-            }
-            const sorted = [...ratingData].sort((a,b) => b.score - a.score);
-            tbody.innerHTML = sorted.map((item, i) => `<tr><td>${i+1}</td><td>${item.team}</td><td>${item.score}</td></tr>`).join('');
-        }
-        function renderRatingList() {
-            const list = document.getElementById('ratingList');
-            if (!ratingData.length) { list.innerHTML = '<p style="opacity:0.7;">Пока нет команд</p>'; return; }
-            list.innerHTML = ratingData.map((item, idx) => `
-                <div class="rating-item">
-                    <span>${item.team} — ${item.score} баллов</span>
-                    <button onclick="deleteRatingEntry(${idx})"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-        window.addRatingEntry = function(e) {
-            e.preventDefault();
-            const name = document.getElementById('teamName').value.trim();
-            const score = parseInt(document.getElementById('teamScore').value, 10);
-            if (name && !isNaN(score)) {
-                ratingData.push({ team: name, score });
-                saveRating();
-                updateRatingTable();
-                renderRatingList();
-                document.getElementById('addRatingForm').reset();
-            }
-        };
-        window.deleteRatingEntry = function(idx) {
-            ratingData.splice(idx, 1);
-            saveRating();
-            updateRatingTable();
-            renderRatingList();
-        };
-        updateRatingTable();
-        window.openModal = openModal;
-        window.closeModal = closeModal;
-    </script>
+    window.addEventListener('pointermove', e => fleeFrom(e.clientX, e.clientY), { passive: true });
+
+    // Клик/тап по сердечку = победа
+    function tryCatch(e) {
+      if (caught) return;
+      tries++;
+      triesEl.textContent = 'Попыток: ' + tries;
+
+      // проверка попадания по реальному положению
+      const cx = x + HEART_SIZE / 2;
+      const cy = y + HEART_SIZE / 2;
+      const px = e.clientX, py = e.clientY;
+      const hit = Math.hypot(px - cx, py - cy) < HEART_SIZE * 0.75;
+
+      if (hit) {
+        win();
+      } else {
+        // промах — резко отпрыгнуть
+        fleeFrom(px, py);
+      }
+    }
+    // слушаем на всём документе, чтобы считать и промахи
+    document.addEventListener('pointerdown', tryCatch);
+    // отдельный прямой клик по сердечку — гарантированная победа
+    heart.addEventListener('pointerdown', e => { e.stopPropagation(); if(!caught){ tries++; triesEl.textContent='Попыток: '+tries; win(); } });
+
+    function win() {
+      caught = true;
+      clearTimeout(hopTimer);
+      heart.style.display = 'none';
+      winEl.classList.add('show');
+      if (navigator.vibrate) navigator.vibrate([40, 30, 60]);
+    }
+
+    // Главный цикл анимации: быстрое плавное скольжение к цели.
+    // Дрожь/покачивание НЕ постоянные — включаются приступами (см. taunt).
+    function loop() {
+      // плавно, но БЫСТРО движемся к цели (0.14 -> 0.26)
+      x += (tx - x) * 0.26;
+      y += (ty - y) * 0.26;
+
+      let shakeX = 0, shakeY = 0;
+      // мелкое дрожание только во время "дразнящего приступа"
+      if (taunting) {
+        wobbleT += 1.0;
+        shakeX = Math.sin(wobbleT * 2.7) * 5;
+        shakeY = Math.cos(wobbleT * 3.3) * 5;
+      }
+
+      heart.style.transform =
+        `translate(${(x + shakeX).toFixed(2)}px, ${(y + shakeY).toFixed(2)}px)`;
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    // ---- Дразнящие приступы: сердечко замирает на месте и трясётся ----
+    // Происходят периодически, в случайные моменты, ненадолго.
+    const emoji = heart.querySelector('.emoji');
+    let taunting = false;
+    function scheduleTaunt() {
+      const wait = rand(1600, 3800);   // пауза между приступами
+      setTimeout(() => {
+        if (caught) return;
+        taunting = true;
+        emoji.classList.add('taunt');
+        // на время приступа сердечко "замирает" (цель = текущая позиция)
+        tx = x; ty = y;
+        // короткая вибрация телефона для эффекта
+        if (navigator.vibrate) navigator.vibrate(60);
+
+        const dur = rand(400, 750);    // длительность приступа
+        setTimeout(() => {
+          taunting = false;
+          emoji.classList.remove('taunt');
+          if (!caught) { pickTarget(); scheduleTaunt(); }
+        }, dur);
+      }, wait);
+    }
+    scheduleTaunt();
+
+    // Пересчёт границ при повороте экрана
+    window.addEventListener('resize', () => {
+      const b = bounds();
+      x = Math.max(b.minX, Math.min(b.maxX, x));
+      y = Math.max(b.minY, Math.min(b.maxY, y));
+      tx = Math.max(b.minX, Math.min(b.maxX, tx));
+      ty = Math.max(b.minY, Math.min(b.maxY, ty));
+    });
+  </script>
+
 </body>
 </html>
